@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nike Tiger Run Experience</title>
+
+    <!-- Fonts: Antonio & Archivo Narrow -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Antonio:wght@700&family=Archivo+Narrow:wght@500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="css/style.css?v=2" />
+  </head>
+  <body>
+    <!-- HERO SEQUENCE (The Tiger Engine) -->
+    <section id="tiger-engine" class="hero-sequence">
+      <div class="sticky-container">
+        <!-- Ambient Background Canvas is removed to fix blurred edge artifacts -->
+
+        <!-- Foreground Sharp Canvas (contain, masked) -->
+        <canvas id="tiger-canvas"></canvas>
+
+        <!-- Hero Typography baked into images -->
+      </div>
+    </section>
+
+    <!-- POST-HERO EXPERIENCE -->
+    <main id="post-hero">
+      <!-- P1: Product Intro -->
+      <section class="section-p1 first-look">
+        <div class="content-container">
+          <span class="section-eyebrow">First Look</span>
+          <h2 class="section-title">NIKE AIR MAX PULSE</h2>
+          <p class="section-description">
+            Push past your limits with the all-new Air Max Pulse. Engineered
+            with precision dynamic cushioning and responsive energy return for
+            the city streets. Feel the ground. Leave them behind.
+          </p>
+          <div class="button-group">
+            <button class="btn btn-primary">Shop Now</button>
+            <button class="btn btn-secondary">Explore Features</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- P2: Carousel -->
+      <section class="section-p2 best-of-air">
+        <div class="carousel-header">
+          <h2 class="carousel-title">Best of Air Max</h2>
+          <div class="carousel-nav">
+            <button class="nav-btn prev-btn" aria-label="Previous">❮</button>
+            <button class="nav-btn next-btn" aria-label="Next">❯</button>
+          </div>
+        </div>
+
+        <div class="carousel-track">
+          <!-- Cards -->
+          <div class="carousel-card">
+            <img
+              class="card-img"
+              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+              alt="Air Max Pulse Roam"
+            />
+            <div class="card-info">
+              <h3>Air Max Pulse Roam</h3>
+              <p class="category">Men's Shoes</p>
+              <p class="price">$160</p>
+            </div>
+          </div>
+          <div class="carousel-card">
+            <img
+              class="card-img"
+              src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+              alt="Air Max Dn"
+            />
+            <div class="card-info">
+              <h3>Air Max Dn</h3>
+              <p class="category">Women's Shoes</p>
+              <p class="price">$160</p>
+            </div>
+          </div>
+          <div class="carousel-card">
+            <img
+              class="card-img"
+              src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+              alt="Air Max 1"
+            />
+            <div class="card-info">
+              <h3>Air Max 1</h3>
+              <p class="category">Men's Shoes</p>
+              <p class="price">$140</p>
+            </div>
+          </div>
+          <div class="carousel-card">
+            <img
+              class="card-img"
+              src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+              alt="Air Max Plus"
+            />
+            <div class="card-info">
+              <h3>Air Max Plus</h3>
+              <p class="category">Older Kids' Shoes</p>
+              <p class="price">$145</p>
+            </div>
+          </div>
+          <div class="carousel-card">
+            <img
+              class="card-img"
+              src="https://images.unsplash.com/photo-1514989940723-e8e51635b782?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+              alt="Air Max 95"
+            />
+            <div class="card-info">
+              <h3>Air Max 95</h3>
+              <p class="category">Men's Shoes</p>
+              <p class="price">$175</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- P3: Cinematic Banner -->
+      <section class="section-p3 cinematic-banner">
+        <div class="banner-image">
+          <div class="banner-overlay"></div>
+          <h2 class="banner-title">STEP INTO WHAT FEELS GOOD</h2>
+          <button class="btn btn-primary banner-btn">Shop Collection</button>
+        </div>
+      </section>
+
+      <!-- P4: The Essentials -->
+      <section class="section-p4 essentials">
+        <h2 class="essentials-title">The Essentials</h2>
+        <div class="grid-3-col">
+          <div class="grid-item">
+            <div
+              class="grid-img placeholder-img-tall"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1552066344-9d437fb2f144?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80&quot;);
+              "
+            ></div>
+            <button class="btn btn-pill-overlay">Men's</button>
+          </div>
+          <div class="grid-item">
+            <div
+              class="grid-img placeholder-img-tall"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80&quot;);
+              "
+            ></div>
+            <button class="btn btn-pill-overlay">Women's</button>
+          </div>
+          <div class="grid-item">
+            <div
+              class="grid-img placeholder-img-tall"
+              style="
+                background-image: url(&quot;https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80&quot;);
+              "
+            ></div>
+            <button class="btn btn-pill-overlay">Kids'</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Find A Store</h4>
+          <h4>Become A Member</h4>
+          <h4>Send Us Feedback</h4>
+        </div>
+        <div class="footer-col">
+          <h4>Help</h4>
+          <ul>
+            <li>Get Help</li>
+            <li>Order Status</li>
+            <li>Delivery</li>
+            <li>Returns</li>
+            <li>Payment Options</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li>About Nike</li>
+            <li>News</li>
+            <li>Careers</li>
+            <li>Investors</li>
+            <li>Sustainability</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Promotions & Discounts</h4>
+          <ul>
+            <li>Student</li>
+            <li>Military</li>
+            <li>Teacher</li>
+            <li>Birthday</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Nike, Inc. All Rights Reserved</p>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+
+    <script src="js/TigerExperience.js?v=2"></script>
+    <script src="js/main.js?v=2"></script>
+  </body>
+</html>
