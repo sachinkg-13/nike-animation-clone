@@ -25,7 +25,9 @@ class TigerExperience {
     this.frameExt = 'jpg'; // Auto-detected in init()
     this.loadedCount = 0;
 
-    // Create loading overlay
+    // ── Preloader Config ──
+    // Add as many videos as you like: preloader-leopard-1.mp4, 2, 3…
+    this.preloaderVideoCount = 3; // <-- UPDATE this when you add more clips
     this.loadingOverlay = this.createLoadingOverlay();
 
     this.init();
@@ -46,38 +48,56 @@ class TigerExperience {
   createLoadingOverlay() {
     const overlay = document.createElement('div');
     overlay.id = 'tiger-loader';
-    Object.assign(overlay.style, {
-      position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
-      background: '#0b0b0b', display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center', zIndex: '9999',
-      transition: 'opacity 0.6s ease',
+    overlay.classList.add('tiger-loader');
+
+    // Pick a random preloader video
+    const videoIndex = Math.ceil(Math.random() * this.preloaderVideoCount);
+    const videoSrc = `assets/preloader-leopard-${videoIndex}.mp4`;
+
+    // Video element
+    const video = document.createElement('video');
+    video.id = 'loader-video';
+    video.src = videoSrc;
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.autoplay = true;
+    video.setAttribute('playsinline', '');
+    video.classList.add('loader-video');
+
+    // Detect portrait vs landscape once metadata loads
+    video.addEventListener('loadedmetadata', () => {
+      if (video.videoHeight > video.videoWidth) {
+        // Portrait video — add class so CSS can handle it
+        video.classList.add('portrait');
+      }
     });
 
+    // Try to play (some browsers block autoplay)
+    video.play().catch(() => {});
+
+    // Bottom bar container (progress + percentage)
+    const bottomBar = document.createElement('div');
+    bottomBar.classList.add('loader-bottom');
+
     const track = document.createElement('div');
-    Object.assign(track.style, {
-      width: '200px', height: '3px', background: 'rgba(255,255,255,0.15)',
-      borderRadius: '4px', overflow: 'hidden',
-    });
+    track.classList.add('loader-bar-track');
 
     const fill = document.createElement('div');
     fill.id = 'loader-fill';
-    Object.assign(fill.style, {
-      width: '0%', height: '100%', background: '#fff',
-      borderRadius: '4px', transition: 'width 0.15s ease',
-    });
+    fill.classList.add('loader-bar-fill');
 
     const text = document.createElement('span');
     text.id = 'loader-text';
+    text.classList.add('loader-text');
     text.textContent = '0%';
-    Object.assign(text.style, {
-      marginTop: '1rem', color: 'rgba(255,255,255,0.6)',
-      fontFamily: '"Archivo Narrow", sans-serif', fontSize: '0.85rem',
-      letterSpacing: '2px',
-    });
 
     track.appendChild(fill);
-    overlay.appendChild(track);
-    overlay.appendChild(text);
+    bottomBar.appendChild(track);
+    bottomBar.appendChild(text);
+
+    overlay.appendChild(video);
+    overlay.appendChild(bottomBar);
     document.body.appendChild(overlay);
     return overlay;
   }

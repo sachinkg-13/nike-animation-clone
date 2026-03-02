@@ -1,6 +1,105 @@
 /* ==========================================================================
    CSS Variables & Reset
    ========================================================================== */
+
+/* ==========================================================================
+   Video Preloader
+   ========================================================================== */
+.tiger-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0b0b0b;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease;
+  overflow: hidden;
+}
+
+.loader-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Portrait videos: keep centered, fill height, let width overflow + blur edges */
+.loader-video.portrait {
+  min-width: unset;
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Blurred edge fill behind portrait videos */
+.tiger-loader:has(.loader-video.portrait)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  z-index: -1;
+}
+
+.tiger-loader:has(.loader-video.portrait)::after {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  background: #0b0b0b;
+  z-index: 0;
+}
+
+.tiger-loader:has(.loader-video.portrait) .loader-video {
+  z-index: 1;
+}
+
+.loader-bottom {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 10;
+}
+
+.loader-bar-track {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.loader-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: #fff;
+  border-radius: 4px;
+  transition: width 0.15s ease;
+}
+
+.loader-text {
+  color: rgba(255, 255, 255, 0.5);
+  font-family: "Archivo Narrow", sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Root Variables
+   ========================================================================== */
 :root {
   /* Colors */
   --black: #0b0b0b;
