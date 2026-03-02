@@ -26,8 +26,7 @@ class TigerExperience {
     this.loadedCount = 0;
 
     // ── Preloader Config ──
-    // Add as many videos as you like: preloader-leopard-1.mp4, 2, 3…
-    this.preloaderVideoCount = 3; // <-- UPDATE this when you add more clips
+    this.preloaderVideoSrc = 'assets/preloader-leopard-1.mp4';
     this.loadingOverlay = this.createLoadingOverlay();
 
     this.init();
@@ -51,8 +50,7 @@ class TigerExperience {
     overlay.classList.add('tiger-loader');
 
     // Pick a random preloader video
-    const videoIndex = Math.ceil(Math.random() * this.preloaderVideoCount);
-    const videoSrc = `assets/preloader-leopard-${videoIndex}.mp4`;
+    const videoSrc = this.preloaderVideoSrc;
 
     // Video element
     const video = document.createElement('video');
