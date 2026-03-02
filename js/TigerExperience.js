@@ -7,7 +7,7 @@ class TigerExperience {
     this.ctxFg = this.foregroundCanvas.getContext("2d", { alpha: false });
 
     // Define sequence properties
-    this.frameCount = 217; // Updated from 242 based on available assets
+    this.frameCount = 217;
     this.images = [];
     this.currentFrame = { value: 1 };
     this.lastRenderedIndex = -1;
@@ -16,12 +16,18 @@ class TigerExperience {
     this.baseWidth = 1920;
     this.baseHeight = 1080;
 
-    // Setup internal canvas resolution
-    // CSS object-fit will handle the display layout (contain vs cover)
-    this.foregroundCanvas.width = this.baseWidth;
-    this.foregroundCanvas.height = this.baseHeight;
+    // Retina / High-DPI canvas support (capped at 2x for performance)
+    this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+    this.foregroundCanvas.width = this.baseWidth * this.dpr;
+    this.foregroundCanvas.height = this.baseHeight * this.dpr;
+    this.ctxFg.scale(this.dpr, this.dpr);
 
+    this.frameExt = 'jpg'; // Auto-detected in init()
     this.loadedCount = 0;
+
+    // Create loading overlay
+    this.loadingOverlay = this.createLoadingOverlay();
+
     this.init();
 
     // Add Resize Listener
@@ -37,11 +43,81 @@ class TigerExperience {
     }, 150); // Debounce duration
   }
 
-  init() {
+  createLoadingOverlay() {
+    const overlay = document.createElement('div');
+    overlay.id = 'tiger-loader';
+    Object.assign(overlay.style, {
+      position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
+      background: '#0b0b0b', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center', zIndex: '9999',
+      transition: 'opacity 0.6s ease',
+    });
+
+    const track = document.createElement('div');
+    Object.assign(track.style, {
+      width: '200px', height: '3px', background: 'rgba(255,255,255,0.15)',
+      borderRadius: '4px', overflow: 'hidden',
+    });
+
+    const fill = document.createElement('div');
+    fill.id = 'loader-fill';
+    Object.assign(fill.style, {
+      width: '0%', height: '100%', background: '#fff',
+      borderRadius: '4px', transition: 'width 0.15s ease',
+    });
+
+    const text = document.createElement('span');
+    text.id = 'loader-text';
+    text.textContent = '0%';
+    Object.assign(text.style, {
+      marginTop: '1rem', color: 'rgba(255,255,255,0.6)',
+      fontFamily: '"Archivo Narrow", sans-serif', fontSize: '0.85rem',
+      letterSpacing: '2px',
+    });
+
+    track.appendChild(fill);
+    overlay.appendChild(track);
+    overlay.appendChild(text);
+    document.body.appendChild(overlay);
+    return overlay;
+  }
+
+  updateLoadingProgress() {
+    const pct = Math.round((this.loadedCount / this.frameCount) * 100);
+    const fill = document.getElementById('loader-fill');
+    const text = document.getElementById('loader-text');
+    if (fill) fill.style.width = `${pct}%`;
+    if (text) text.textContent = `${pct}%`;
+  }
+
+  hideLoader() {
+    if (this.loadingOverlay) {
+      this.loadingOverlay.style.opacity = '0';
+      setTimeout(() => {
+        if (this.loadingOverlay && this.loadingOverlay.parentNode) {
+          this.loadingOverlay.parentNode.removeChild(this.loadingOverlay);
+        }
+      }, 600);
+    }
+  }
+
+  detectFrameFormat() {
+    return new Promise((resolve) => {
+      const testImg = new Image();
+      testImg.onload = () => resolve('webp');
+      testImg.onerror = () => resolve('jpg');
+      testImg.src = 'assets/frames/ezgif-frame-001.webp';
+    });
+  }
+
+  async init() {
+    // Auto-detect WebP frames (falls back to JPG if not available)
+    this.frameExt = await this.detectFrameFormat();
+
     this.preloadImages()
       .then(() => {
-        console.log("All Tiger frames loaded.");
-        // Draw first frame immediately
+        console.log(`All Tiger frames loaded (${this.frameExt}).`);
+        this.hideLoader();
         this.render(1);
       })
       .catch((err) => {
@@ -49,7 +125,7 @@ class TigerExperience {
           "Tiger frames not found. They might not be generated/downloaded yet.",
           err,
         );
-        // Draw a fallback frame so we know the canvas is working
+        this.hideLoader();
         this.drawFallback();
       });
   }
@@ -60,12 +136,12 @@ class TigerExperience {
       for (let i = 1; i <= this.frameCount; i++) {
         const img = new Image();
 
-        // Format: ezgif-frame-001.jpg
         const frameString = i.toString().padStart(3, "0");
-        img.src = `assets/frames/ezgif-frame-${frameString}.jpg`;
+        img.src = `assets/frames/ezgif-frame-${frameString}.${this.frameExt}`;
 
         img.onload = () => {
           this.loadedCount++;
+          this.updateLoadingProgress();
           if (this.loadedCount === this.frameCount) {
             resolve();
           }
@@ -73,7 +149,6 @@ class TigerExperience {
 
         img.onerror = () => {
           errorCount++;
-          // If we fail loading a few, assume the sequence doesn't exist
           if (errorCount > 5 && this.loadedCount === 0) {
             reject("Assets missing. Create sequence in assets/frames/");
           }
@@ -98,19 +173,25 @@ class TigerExperience {
   }
 
   render(index) {
-    // Ensure index is within bounds
     const safeIndex = Math.min(Math.max(1, Math.round(index)), this.frameCount);
-
-    // Optimization: Don't redraw if it's the exact same frame
     if (safeIndex === this.lastRenderedIndex) return;
 
     const img = this.images[safeIndex - 1];
 
     if (img && img.complete && img.naturalHeight > 0) {
-      this.ctxFg.clearRect(0, 0, this.baseWidth, this.baseHeight);
+      // Crossfade for smooth motion when scrolling slowly (1-2 frame jumps)
+      const frameDelta = Math.abs(safeIndex - this.lastRenderedIndex);
 
-      // Draw to Foreground
-      this.ctxFg.drawImage(img, 0, 0, this.baseWidth, this.baseHeight);
+      if (frameDelta <= 2 && this.lastRenderedIndex > 0) {
+        // Draw new frame over existing with slight transparency for motion blur
+        this.ctxFg.globalAlpha = 0.85;
+        this.ctxFg.drawImage(img, 0, 0, this.baseWidth, this.baseHeight);
+        this.ctxFg.globalAlpha = 1.0;
+      } else {
+        // Clean draw for large jumps
+        this.ctxFg.clearRect(0, 0, this.baseWidth, this.baseHeight);
+        this.ctxFg.drawImage(img, 0, 0, this.baseWidth, this.baseHeight);
+      }
 
       this.lastRenderedIndex = safeIndex;
     }

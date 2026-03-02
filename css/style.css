@@ -129,8 +129,7 @@ canvas {
 #tiger-canvas {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  /* Removed the gradient mask since it causes the underlying blurred canvas to show through */
+  object-fit: cover;
 }
 
 .hero-typography {
@@ -435,10 +434,12 @@ canvas {
   margin-bottom: 0.75rem;
   color: #555;
   cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .footer-col ul li:hover {
   color: var(--black);
+  transform: translateX(4px);
 }
 
 .footer-bottom {
@@ -446,4 +447,22 @@ canvas {
   padding-top: 2rem;
   color: #777;
   font-size: 0.8rem;
+}
+
+/* ==========================================================================
+   Hero Overlay Text (scroll-synced)
+   ========================================================================== */
+.hero-overlay-text {
+  position: absolute;
+  z-index: 3;
+  text-align: center;
+  color: var(--white);
+  mix-blend-mode: difference;
+  opacity: 0;
+  pointer-events: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
